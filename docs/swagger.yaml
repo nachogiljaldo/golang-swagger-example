@@ -1,0 +1,172 @@
+basePath: /v1
+definitions:
+  model.Error:
+    description: Payload for API errors
+    properties:
+      Code:
+        description: Error code
+        type: integer
+      name:
+        description: Error description
+        maxLength: 16
+        minLength: 4
+        type: string
+    type: object
+  model.User:
+    description: user model
+    properties:
+      name:
+        description: Name of the user
+        type: string
+    type: object
+host: petstore.swagger.io
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /users:
+    get:
+      description: Retrieves the list of users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: gets the users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Allows creating an user
+      parameters:
+      - description: User to create
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          headers:
+            Location:
+              description: The path in which the newly created resource can be found
+              type: string
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: creates an user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Deletes a user given its id, performs a full delete of the user.
+        Method is idempotent.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: success
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Deletes a user given its id
+      tags:
+      - users
+    get:
+      description: Retrieves the list of users
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Gets a user given its id
+      tags:
+      - users
+    put:
+      description: Updates a user given its id, performs a full update of the user.
+      parameters:
+      - description: New content for the user
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: success
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Updates a user given its id
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    description: API for User operations.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
